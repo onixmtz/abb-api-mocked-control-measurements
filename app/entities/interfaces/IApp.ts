@@ -1,3 +1,0 @@
-type IApp = {
-  start(): void;
-}

@@ -1,10 +1,14 @@
 require("source-map-support").install();
 const dotenv = require("dotenv");
-//import dotenv from "dotenv";
-import express from "express";
+const express = require("express");
 import Core from "express-serve-static-core";
-import { IController } from "./entities/interfaces/IController";
-import IndexController from "./controller/Index";
+import { IController } from "../lib/entities/interfaces/IController";
+import { isValidTcpPort } from "../lib/utils/Tools";
+import IndexController from "./controller/IndexController";
+import PartsGetController from "./controller/PartsGetController";
+import PartsListController from "./controller/PartsListController";
+import { IApp } from "./entities/interfaces/IApp";
+
 
 export default class App {
   static readonly versionCode: number = 1;
@@ -15,6 +19,8 @@ export default class App {
   protected static expressInstance?: Core.Express = undefined;
   private controllers: IController[] = [
     new IndexController(),
+    new PartsListController(),
+    new PartsGetController(),
   ];
 
   private constructor(port: number) {
@@ -67,11 +73,3 @@ export default class App {
     App.expressInstance.listen(this.port, () => console.warn(`App STARTED!\n\tListening on tcp:${this.port}`));
   }
 }
-
-const app = App.createInstance();
-app.start();
-
-function isValidTcpPort(port: number): boolean {
-  return typeof port === "number" && port > 0 && port < 65536;
-}
-

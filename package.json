@@ -1,14 +1,16 @@
 {
   "name": "abba-api-mocked-control-measurements",
   "version": "0.0.1",
-  "main": "build/App.js",
+  "main": "build/debug/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc",
-    "build": "npm run clean; npm run tsc",
-    "clean": "if [ -d \"build\" ]; then rm -rf build/*; fi",
-    "start": "npm run build; node build/App.js",
-    "debug": "npm run build; node -r build/App.js.map"
+    "tsc": "tsc -p tsconfig.release.json",
+    "build": "npm run clean; npm run tsc; cp .env.dist build/release/.env",
+    "start": "npm run build; cd build/release; clear; node index.js",
+    "tscDebug": "tsc", 
+    "buildDebug": "npm run clean; npm run tscDebug", 
+    "debug": "npm run buildDebug; cd build/debug; node -r source-map-support/register index.js",
+    "clean": "if [ -d \"build\" ]; then rm -rf build; fi"
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
