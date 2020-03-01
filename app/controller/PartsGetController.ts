@@ -5,13 +5,11 @@ import { IController } from "../../lib/entities/interfaces/IController";
 import MockedPartsRepository from "../services/MockedPartsRepository";
 
 
-const repository = MockedPartsRepository.getInstance();
-
 export default class PartsGetController implements IController {
   public readonly method = HttpMethod.Get;
   path: string = "/parts/:id";
 
   handler(req: Request<ParamsDictionary>, res: Response): void {
-    res.json(repository.get(req.params.id));
+    res.json(MockedPartsRepository.getInstance().get(req.params.id));
   }
 }

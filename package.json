@@ -1,24 +1,33 @@
 {
-  "name": "abba-api-mocked-control-measurements",
-  "version": "0.0.1",
+  "name": "abb-api-mocked-control-measurements",
+  "version": "0.0.3",
   "main": "build/debug/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc -p tsconfig.release.json",
-    "build": "npm run clean; npm run tsc; cp .env.dist build/release/.env",
-    "start": "npm run build; cd build/release; clear; node index.js",
-    "tscDebug": "tsc", 
-    "buildDebug": "npm run clean; npm run tscDebug", 
+    "tscRelease": "tsc -p tsconfig.release.json",
+    "buildRelease": "rm -rf ./build/release; npm run tscRelease; npm run copyReleaseDistributables",
+    "copyReleasePackage": "cp package.json.dist ./build/release/package.json; cp package-lock.json.dist ./build/release/package-lock.json",
+    "copyReleaseX509": "cp -r tls.dist build/release/tls",
+    "copyReleaseEnv": "cp .env.dist build/release/.env",
+    "copyReleaseDistributables": "npm run copyReleasePackage; npm run copyReleaseX509; npm run copyReleaseEnv",
+    "start": "npm run buildRelease; cd build/release; npm ci; clear; node index.js",
+    "tscDebug": "tsc",
+    "buildDebug": "rm -rf ./build/debug; npm run tscDebug; npm run copyDebugDistributables",
+    "copyDebugX509": "cp -r tls.dist build/debug/tls",
+    "copyDebugEnv": "cp .env.dist build/debug/.env",
+    "copyDebugDistributables": "npm run copyDebugX509; npm run copyDebugEnv",
     "debug": "npm run buildDebug; cd build/debug; node -r source-map-support/register index.js",
     "clean": "if [ -d \"build\" ]; then rm -rf build; fi"
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
-    "source-map-support": "^0.5.16",
     "typescript": "^3.8.2"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "source-map-support": "^0.5.16",
+    "https": "^1.0.0"
   }
 }
